@@ -14,7 +14,8 @@ const { messages: m } = Astro.props
 const lang = m.lang === "es" ? "es" : "en"
 const base = lang === "es" ? "/es" : ""
 
-const posts = (await getCollection("blog", (p) => p.data.lang === lang))
+// Future-dated posts act as drafts: hidden until a build on/after their pubDate.
+const posts = (await getCollection("blog", (p) => p.data.lang === lang && p.data.pubDate <= new Date()))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3)
 
