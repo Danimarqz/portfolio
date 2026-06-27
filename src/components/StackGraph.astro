@@ -1,0 +1,157 @@
+---
+// Force-free hand-placed node graph of the stack. Hover/tap a node → its edges light up.
+const NODES = [
+  { id: "go",       label: "Go",       color: "#00ADD8", x: 100, y: 120 },
+  { id: "python",   label: "Python",   color: "#ffd343", x: 100, y: 320 },
+  { id: "aws",      label: "AWS",      color: "#ff9900", x: 300, y: 90 },
+  { id: "lambda",   label: "Lambda",   color: "#ff9900", x: 300, y: 250 },
+  { id: "dynamo",   label: "DynamoDB", color: "#4d72e0", x: 510, y: 260 },
+  { id: "bedrock",  label: "Bedrock",  color: "#34d399", x: 480, y: 90 },
+  { id: "textract", label: "Textract", color: "#34d399", x: 565, y: 165 },
+  { id: "docker",   label: "Docker",   color: "#2496ed", x: 300, y: 390 },
+] as const;
+
+const EDGES: [string, string][] = [
+  ["go", "aws"], ["go", "lambda"], ["go", "dynamo"],
+  ["python", "lambda"], ["python", "aws"], ["python", "dynamo"],
+  ["aws", "lambda"], ["aws", "bedrock"], ["aws", "docker"],
+  ["lambda", "dynamo"], ["lambda", "bedrock"],
+  ["bedrock", "textract"],
+];
+
+const byId = Object.fromEntries(NODES.map((n) => [n.id, n]));
+---
+
+<svg
+  id="stack-graph"
+  viewBox="0 0 640 460"
+  class="w-full h-auto max-w-2xl mx-auto"
+  role="img"
+  aria-labelledby="stack-graph-title stack-graph-desc"
+>
+  <title id="stack-graph-title">Grafo del stack técnico</title>
+  <desc id="stack-graph-desc">Nodos de tecnologías conectados: Go, Python, AWS, Lambda, DynamoDB, Bedrock, Textract y Docker.</desc>
+
+  <g class="edges">
+    {EDGES.map(([a, b]) => {
+      const n1 = byId[a], n2 = byId[b];
+      return (
+        <line
+          class="edge"
+          data-from={a}
+          data-to={b}
+          x1={n1.x} y1={n1.y} x2={n2.x} y2={n2.y}
+        />
+      );
+    })}
+  </g>
+
+  <g class="nodes">
+    {NODES.map((n, i) => (
+      <g
+        class="node"
+        data-id={n.id}
+        tabindex="0"
+        role="button"
+        aria-label={n.label}
+        style={`--c:${n.color}; --i:${i}`}
+      >
+        <circle class="halo" cx={n.x} cy={n.y} r="26" />
+        <circle class="dot" cx={n.x} cy={n.y} r="16" />
+        <text class="label" x={n.x} y={n.y + 36} text-anchor="middle">{n.label}</text>
+      </g>
+    ))}
+  </g>
+</svg>
+
+<style>
+  #stack-graph { touch-action: manipulation; }
+
+  .edge {
+    stroke: var(--color-border-subtle);
+    stroke-width: 1.5;
+    transition: stroke 0.25s ease, stroke-width 0.25s ease, opacity 0.25s ease;
+  }
+
+  .dot {
+    fill: var(--color-surface-bar);
+    stroke: var(--c);
+    stroke-width: 2;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pulse 3s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.35s);
+    transition: stroke-width 0.2s ease;
+  }
+
+  .halo {
+    fill: var(--c);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .label {
+    fill: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    transition: fill 0.2s ease;
+  }
+
+  .node { cursor: pointer; outline: none; }
+  .node:focus-visible .dot { stroke-width: 3; }
+
+  /* active node (set by JS via .is-active) */
+  .node.is-active .halo { opacity: 0.18; }
+  .node.is-active .dot { stroke-width: 3.5; }
+  .node.is-active .label { fill: var(--color-fg); }
+
+  /* dim everything when a node is active */
+  svg.has-active .edge { opacity: 0.25; }
+  svg.has-active .edge.lit { opacity: 1; }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+  }
+</style>
+
+<script>
+  function initGraph() {
+    const svg = document.getElementById("stack-graph");
+    if (!svg) return;
+    const nodes = Array.from(svg.querySelectorAll<SVGGElement>(".node"));
+    const edges = Array.from(svg.querySelectorAll<SVGLineElement>(".edge"));
+
+    const activate = (id: string | null, color?: string) => {
+      svg.classList.toggle("has-active", Boolean(id));
+      nodes.forEach((n) => n.classList.toggle("is-active", n.dataset.id === id));
+      edges.forEach((e) => {
+        const lit = id != null && (e.dataset.from === id || e.dataset.to === id);
+        e.classList.toggle("lit", lit);
+        e.style.stroke = lit && color ? color : "";
+        e.style.strokeWidth = lit ? "2.5" : "";
+      });
+    };
+
+    nodes.forEach((node) => {
+      const id = node.dataset.id || null;
+      const color = getComputedStyle(node).getPropertyValue("--c").trim();
+      // Hover (desktop)
+      node.addEventListener("pointerenter", (e) => {
+        if ((e as PointerEvent).pointerType === "mouse") activate(id, color);
+      });
+      node.addEventListener("pointerleave", (e) => {
+        if ((e as PointerEvent).pointerType === "mouse") activate(null);
+      });
+      node.addEventListener("focus", () => activate(id, color));
+      node.addEventListener("blur", () => activate(null));
+      // Touch / click toggles
+      node.addEventListener("click", () => {
+        const isActive = node.classList.contains("is-active");
+        activate(isActive ? null : id, color);
+      });
+    });
+  }
+
+  document.addEventListener("astro:page-load", initGraph);
+</script>

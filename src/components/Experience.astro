@@ -1,0 +1,145 @@
+---
+import { getExperience, type Accent } from "@/data/experience"
+import type TranslationMessages from "@/types.d.ts"
+
+interface Props {
+  m: TranslationMessages
+}
+
+const { m } = Astro.props
+const items = getExperience(m)
+
+const accentVar: Record<Accent, string> = {
+  cyan: "var(--color-cyan)",
+  green: "var(--color-green)",
+  dim: "var(--color-dim)",
+}
+// Colour a dot lights up to once the scroll-fill reaches it. Dim entries still glow.
+const litVar: Record<Accent, string> = {
+  cyan: "var(--color-cyan)",
+  green: "var(--color-green)",
+  dim: "var(--color-cyan-alt)",
+}
+---
+
+<div id="exp" class="relative pl-16">
+  <!-- Serpentine path is drawn by JS from the real dot positions. -->
+  <svg id="exp-svg" class="absolute inset-y-0 left-0 w-16 h-full overflow-visible pointer-events-none" aria-hidden="true">
+    <defs>
+      <linearGradient id="exp-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--color-cyan)" />
+        <stop offset="100%" stop-color="var(--color-green)" />
+      </linearGradient>
+    </defs>
+    <path id="exp-base" fill="none" stroke="var(--color-border)" stroke-width="2" stroke-linecap="round" />
+    <path id="exp-prog" fill="none" stroke="url(#exp-grad)" stroke-width="2.5" stroke-linecap="round" />
+  </svg>
+
+  <ol class="space-y-12">
+    {items.map((item) => (
+      <li class="exp-item relative" style={`--accent:${accentVar[item.accent]}; --lit:${litVar[item.accent]}`}>
+        <span class="exp-dot" aria-hidden="true"></span>
+        <p class="font-mono text-sm" style="color:var(--accent)">{item.date}</p>
+        <h3 class="mt-1 text-lg text-[var(--color-fg)]">
+          <span class="font-medium">{item.company}</span>
+          <span class="text-[var(--color-muted)]"> · {item.role}</span>
+        </h3>
+        <p class="mt-2 text-[var(--color-muted)] leading-relaxed max-w-2xl">{item.description}</p>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<style>
+  .exp-dot {
+    position: absolute;
+    left: -52px;            /* aligns with path node x = 12px inside the w-16 gutter */
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    background: var(--color-bg);
+    border: 2px solid var(--color-border-subtle);
+    box-shadow: 0 0 0 4px var(--color-bg);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    z-index: 1;
+  }
+  .exp-item.is-lit .exp-dot {
+    border-color: var(--lit);
+    box-shadow: 0 0 0 4px var(--color-bg), 0 0 16px 0 var(--lit);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .exp-dot { border-color: var(--lit); box-shadow: 0 0 0 4px var(--color-bg), 0 0 16px 0 var(--lit); }
+  }
+</style>
+
+<script>
+  function drawExperience() {
+    const root = document.getElementById("exp");
+    const svg = document.getElementById("exp-svg") as SVGSVGElement | null;
+    const base = document.getElementById("exp-base") as SVGPathElement | null;
+    const prog = document.getElementById("exp-prog") as SVGPathElement | null;
+    if (!root || !svg || !base || !prog) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const NODE_X = 12;   // path runs through here; dots sit on it
+    const SWING = 34;    // how far the line bows out around each segment
+    let length = 0;
+    let nodes: { el: HTMLElement; y: number }[] = [];
+    let totalH = 1;
+
+    const build = () => {
+      const items = Array.from(root.querySelectorAll<HTMLElement>(".exp-item"));
+      if (!items.length) return;
+      const rootBox = root.getBoundingClientRect();
+      const h = root.offsetHeight;
+      totalH = h;
+      svg.setAttribute("viewBox", `0 0 64 ${h}`);
+
+      // dot center Y relative to the container
+      const ys = items.map((li) => {
+        const dot = li.querySelector(".exp-dot") as HTMLElement;
+        const box = dot.getBoundingClientRect();
+        return box.top - rootBox.top + box.height / 2;
+      });
+      nodes = items.map((el, i) => ({ el, y: ys[i] }));
+
+      let d = `M ${NODE_X} ${Math.max(0, ys[0] - 14)} L ${NODE_X} ${ys[0]}`;
+      for (let i = 1; i < ys.length; i++) {
+        const y0 = ys[i - 1], y1 = ys[i];
+        const dir = i % 2 ? 1 : -1; // alternate the bow side → weaving
+        const cx = NODE_X + dir * SWING;
+        d += ` C ${cx} ${y0 + (y1 - y0) * 0.35}, ${cx} ${y1 - (y1 - y0) * 0.35}, ${NODE_X} ${y1}`;
+      }
+      d += ` L ${NODE_X} ${Math.min(h, ys[ys.length - 1] + 14)}`;
+
+      base.setAttribute("d", d);
+      prog.setAttribute("d", d);
+      length = prog.getTotalLength();
+      prog.style.strokeDasharray = String(length);
+      prog.style.strokeDashoffset = reduced ? "0" : String(length);
+    };
+
+    const onScroll = () => {
+      if (reduced || !length) return;
+      const box = root.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // fill as the block scrolls up through the viewport
+      const frac = Math.min(1, Math.max(0, (vh * 0.6 - box.top) / (box.height * 0.85)));
+      prog.style.strokeDashoffset = String(length * (1 - frac));
+      // light each dot once the fill front passes it
+      const front = frac * totalH;
+      nodes.forEach((n) => n.el.classList.toggle("is-lit", front >= n.y - 6));
+    };
+
+    build();
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", () => { build(); onScroll(); });
+    // fonts/layout settle after load → rebuild once
+    setTimeout(() => { build(); onScroll(); }, 300);
+  }
+
+  document.addEventListener("astro:page-load", drawExperience);
+</script>

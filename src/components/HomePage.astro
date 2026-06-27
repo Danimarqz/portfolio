@@ -1,0 +1,74 @@
+---
+import { getCollection } from "astro:content"
+import Layout from "@/layouts/Layout.astro"
+import Hero from "@/components/Hero.astro"
+import Experience from "@/components/Experience.astro"
+import StackGraph from "@/components/StackGraph.astro"
+import Projects from "@/components/Projects.astro"
+
+interface Props {
+  messages: Record<string, string>
+}
+
+const { messages: m } = Astro.props
+const lang = m.lang === "es" ? "es" : "en"
+const base = lang === "es" ? "/es" : ""
+
+const posts = (await getCollection("blog", (p) => p.data.lang === lang))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3)
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString(lang === "es" ? "es-ES" : "en-US", { year: "numeric", month: "short", day: "numeric" })
+---
+
+<Layout title={m.title} description={m.description} m={m}>
+  <main class="px-4">
+    <section class="max-w-3xl mx-auto pt-28 pb-20 sm:pt-36">
+      <Hero m={m} />
+    </section>
+
+    <section id="experience" class="max-w-3xl mx-auto scroll-mt-24 py-16">
+      <h2 class="font-mono text-[var(--color-cyan)] mb-8">{m.exp_header}</h2>
+      <Experience m={m} />
+    </section>
+
+    <section id="stack" class="max-w-3xl mx-auto scroll-mt-24 py-16">
+      <h2 class="font-mono text-[var(--color-cyan)]">{m.stack_header}</h2>
+      <p class="mt-2 mb-8 text-[var(--color-muted)] text-sm">{m.stack_subtitle}</p>
+      <StackGraph />
+    </section>
+
+    <section id="projects" class="max-w-3xl mx-auto scroll-mt-24 py-16">
+      <h2 class="font-mono text-[var(--color-cyan)]">{m.projects_header}</h2>
+      <p class="mt-2 mb-8 text-[var(--color-muted)] text-sm">{m.projects_subtitle}</p>
+      <Projects m={m} />
+    </section>
+
+    <section id="blog" class="max-w-3xl mx-auto scroll-mt-24 py-16">
+      <div class="flex items-baseline justify-between gap-4">
+        <h2 class="font-mono text-[var(--color-cyan)]">{m.blog_header}</h2>
+        <a href={`${base}/blog/`} class="font-mono text-xs text-[var(--color-dim)] hover:text-[var(--color-cyan)] transition whitespace-nowrap">{m.blog_all} →</a>
+      </div>
+      <p class="mt-2 mb-8 text-[var(--color-muted)] text-sm">{m.blog_subtitle}</p>
+
+      {posts.length === 0 ? (
+        <p class="font-mono text-sm text-[var(--color-dim)]">{m.blog_empty}</p>
+      ) : (
+        <ul class="space-y-3">
+          {posts.map((post) => (
+            <li>
+              <a
+                href={`${base}/blog/${post.id.split("/")[0]}/`}
+                class="group flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 p-4 rounded-lg border border-[var(--color-border)] hover:border-[var(--color-cyan)] transition"
+              >
+                <span class="font-mono text-xs text-[var(--color-dim)] sm:w-28 shrink-0">{fmtDate(post.data.pubDate)}</span>
+                <span class="text-[var(--color-fg)] group-hover:text-[var(--color-cyan)] transition">{post.data.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  </main>
+</Layout>

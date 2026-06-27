@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content"
+import Layout from "@/layouts/Layout.astro"
+
+interface Props {
+  m: Record<string, string>
+}
+const { m } = Astro.props
+const lang = m.lang === "es" ? "es" : "en"
+const base = lang === "es" ? "/es" : ""
+
+const posts = (await getCollection("blog", (p) => p.data.lang === lang))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+
+const slugOf = (id: string) => id.split("/")[0]
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString(lang === "es" ? "es-ES" : "en-US", { year: "numeric", month: "short", day: "numeric" })
+---
+
+<Layout title={`blog — ${m.title}`} description={m.blog_subtitle} m={m}>
+  <main class="px-4">
+    <section class="max-w-3xl mx-auto pt-28 sm:pt-36 pb-16">
+      <h1 class="font-mono text-[var(--color-cyan)]">{m.blog_header}</h1>
+      <p class="mt-2 mb-10 text-[var(--color-muted)]">{m.blog_subtitle}</p>
+
+      {posts.length === 0 ? (
+        <p class="font-mono text-sm text-[var(--color-dim)]">{m.blog_empty}</p>
+      ) : (
+        <ul class="space-y-4">
+          {posts.map((post) => (
+            <li>
+              <a
+                href={`${base}/blog/${slugOf(post.id)}/`}
+                class="group block p-5 rounded-xl border border-[var(--color-border)] hover:border-[var(--color-cyan)] transition"
+              >
+                <span class="font-mono text-xs text-[var(--color-dim)]">{fmtDate(post.data.pubDate)}</span>
+                <h2 class="mt-1 text-lg text-[var(--color-fg)] group-hover:text-[var(--color-cyan)] transition">{post.data.title}</h2>
+                <p class="mt-1 text-sm text-[var(--color-muted)]">{post.data.description}</p>
+                {post.data.tags.length > 0 && (
+                  <p class="mt-2 font-mono text-xs text-[var(--color-dim)]">{post.data.tags.map((t) => `#${t}`).join(" ")}</p>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  </main>
+</Layout>

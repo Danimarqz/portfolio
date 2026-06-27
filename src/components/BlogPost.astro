@@ -1,0 +1,86 @@
+---
+import { render, type CollectionEntry } from "astro:content"
+import Layout from "@/layouts/Layout.astro"
+
+interface Props {
+  m: Record<string, string>
+  post: CollectionEntry<"blog">
+}
+const { m, post } = Astro.props
+const lang = m.lang === "es" ? "es" : "en"
+const base = lang === "es" ? "/es" : ""
+
+const { Content } = await render(post)
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString(lang === "es" ? "es-ES" : "en-US", { year: "numeric", month: "long", day: "numeric" })
+---
+
+<Layout title={`${post.data.title} — Daniel Márquez`} description={post.data.description} m={m}>
+  <main class="px-4">
+    <article class="max-w-2xl mx-auto pt-28 sm:pt-36 pb-16">
+      <a href={`${base}/blog/`} class="font-mono text-xs text-[var(--color-dim)] hover:text-[var(--color-cyan)] transition">{m.blog_back}</a>
+
+      <header class="mt-6 mb-8">
+        <p class="font-mono text-xs text-[var(--color-dim)]">{fmtDate(post.data.pubDate)}</p>
+        <h1 class="mt-2 text-3xl text-[var(--color-fg)] font-medium leading-tight">{post.data.title}</h1>
+        {post.data.tags.length > 0 && (
+          <p class="mt-3 font-mono text-xs text-[var(--color-dim)]">{post.data.tags.map((t) => `#${t}`).join(" ")}</p>
+        )}
+      </header>
+
+      {post.data.heroImage && (
+        <img src={post.data.heroImage} alt="" class="w-full rounded-xl border border-[var(--color-border)] mb-8" />
+      )}
+
+      <div class="prose">
+        <Content />
+      </div>
+    </article>
+  </main>
+</Layout>
+
+<style is:global>
+  /* Diagrams: raw <pre class="mermaid"> blocks, not code. Hide until rendered to avoid a flash of source. */
+  .prose pre.mermaid {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    padding: 1.25rem;
+    text-align: center;
+    overflow-x: auto;
+  }
+  .prose pre.mermaid:not([data-processed]) { visibility: hidden; }
+  .prose pre.mermaid svg { max-width: 100%; height: auto; }
+</style>
+
+<script>
+  // Render mermaid diagrams client-side, only on posts that contain one. Loaded lazily from CDN.
+  async function renderDiagrams() {
+    const nodes = document.querySelectorAll<HTMLElement>("pre.mermaid:not([data-processed])");
+    if (!nodes.length) return;
+    const { default: mermaid } = await import("https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs");
+    const css = getComputedStyle(document.documentElement);
+    const c = (name: string) => css.getPropertyValue(name).trim();
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: "strict",
+      fontFamily: "ui-monospace, monospace",
+      theme: "base",
+      themeVariables: {
+        background: c("--color-surface"),
+        primaryColor: c("--color-surface-bar"),
+        primaryBorderColor: c("--color-cyan"),
+        primaryTextColor: c("--color-fg-soft"),
+        secondaryColor: c("--color-surface-bar"),
+        tertiaryColor: c("--color-surface-bar"),
+        lineColor: c("--color-dim"),
+        textColor: c("--color-fg-soft"),
+        clusterBkg: "transparent",
+        clusterBorder: c("--color-border-subtle"),
+        edgeLabelBackground: c("--color-surface"),
+      },
+    });
+    await mermaid.run({ nodes });
+  }
+  document.addEventListener("astro:page-load", renderDiagrams);
+</script>

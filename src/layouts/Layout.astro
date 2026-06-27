@@ -1,0 +1,60 @@
+---
+import "@fontsource-variable/onest";
+import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Snow from "@/components/Snow.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  m: Record<string, string>;
+}
+
+const { title, description, m } = Astro.props;
+
+const lang = Astro.url.pathname.startsWith("/es") ? "es" : "en";
+const site = Astro.site ?? new URL("https://danimarqz.dev/");
+const canonical = new URL(Astro.url.pathname, site).href;
+const ogImage = new URL("/image.png", site).href;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <link rel="alternate" hreflang="en" href={new URL("/", site).href} />
+    <link rel="alternate" hreflang="es" href={new URL("/es/", site).href} />
+    <link rel="alternate" hreflang="x-default" href={new URL("/", site).href} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={lang === "es" ? "es_ES" : "en_US"} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <meta name="google-site-verification" content="0k8eSr-iCeDRB4UKE23TPTStSBG8kC1xunOyhrJO0G8" />
+    <ClientRouter />
+  </head>
+
+  <body>
+    <Snow />
+    <Header m={m} lang={lang} />
+    <slot />
+    <Footer m={m} />
+  </body>
+</html>

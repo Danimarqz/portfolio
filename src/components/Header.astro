@@ -1,0 +1,95 @@
+---
+interface Props {
+  m: Record<string, string>;
+  lang: string;
+}
+const { m, lang } = Astro.props;
+
+const base = lang === "es" ? "/es" : "";
+const path = Astro.url.pathname;
+
+// Same page in the other language.
+const otherLang = lang === "es" ? "en" : "es";
+const otherHref =
+  lang === "es"
+    ? path.replace(/^\/es/, "") || "/"
+    : "/es" + path;
+
+const navItems = [
+  { label: m.nav_experience, href: `${base}/#experience` },
+  { label: m.nav_stack, href: `${base}/#stack` },
+  { label: m.nav_projects, href: `${base}/#projects` },
+  { label: m.nav_blog, href: `${base}/blog/` },
+  { label: m.nav_contact, href: "mailto:hola@danimarqz.dev" },
+];
+---
+
+<header class="fixed top-0 z-20 flex justify-center w-full mt-3 px-2">
+  <nav
+    id="nav"
+    class="flex items-center gap-1 px-2 py-1.5 font-mono text-xs sm:text-sm rounded-full border border-[var(--color-border)] bg-[var(--color-surface)]/70 backdrop-blur-md text-[var(--color-muted)] max-w-full overflow-x-auto"
+  >
+    <a
+      class="px-2.5 py-1 rounded-full whitespace-nowrap font-medium text-[var(--color-fg)] hover:text-[var(--color-cyan)] transition"
+      href={`${base}/`}
+      aria-label="inicio"
+    >
+      <span class="text-[var(--color-green)]">~</span>/dani
+    </a>
+    {navItems.map((item) => (
+      <a
+        class="nav-link px-2.5 py-1 rounded-full whitespace-nowrap transition hover:text-[var(--color-cyan)]"
+        href={item.href}
+      >
+        {item.label}
+      </a>
+    ))}
+    <a
+      class="px-2.5 py-1 rounded-full border border-[var(--color-border-subtle)] text-[var(--color-dim)] hover:text-[var(--color-fg)] transition whitespace-nowrap"
+      href={otherHref}
+      aria-label={`Switch to ${otherLang}`}
+    >
+      {otherLang.toUpperCase()}
+    </a>
+  </nav>
+</header>
+
+<style>
+  #nav {
+    animation: nav-shadow 1s linear both;
+    animation-timeline: scroll();
+    animation-range: 0 100px;
+  }
+  @keyframes nav-shadow {
+    to {
+      box-shadow: 0 8px 30px -8px rgba(0, 0, 0, 0.6);
+      background-color: color-mix(in srgb, var(--color-surface) 92%, transparent);
+    }
+  }
+</style>
+
+<script>
+  // Highlight the nav link of the section in view.
+  document.addEventListener("astro:page-load", () => {
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>(".nav-link"));
+    const map = new Map<string, HTMLAnchorElement>();
+    links.forEach((l) => {
+      const id = l.getAttribute("href")?.split("#")[1];
+      if (id) map.set(id, l);
+    });
+    const sections = Array.from(document.querySelectorAll<HTMLElement>("section[id]"));
+    if (!sections.length) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          map.forEach((l) => l.classList.remove("text-[var(--color-cyan)]"));
+          map.get(e.target.id)?.classList.add("text-[var(--color-cyan)]");
+        });
+      },
+      { threshold: 0.3 }
+    );
+    sections.forEach((s) => obs.observe(s));
+  });
+</script>

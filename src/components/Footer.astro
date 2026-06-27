@@ -1,0 +1,15 @@
+---
+const currentYear = new Date().getFullYear();
+const { m } = Astro.props;
+---
+
+<footer class="mt-32 border-t border-[var(--color-border)]">
+  <div class="max-w-3xl mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 font-mono text-xs text-[var(--color-dim)]">
+    <span class="flex items-center gap-2">
+      <img src="/me.webp" alt="Daniel Márquez" width="28" height="28" loading="lazy" class="size-7 rounded-full border border-[var(--color-border)] object-cover" />
+      © {currentYear} Daniel Márquez
+    </span>
+    <span>{m.footer_note}</span>
+    <a class="hover:text-[var(--color-cyan)] transition" href="mailto:hola@danimarqz.dev">hola@danimarqz.dev</a>
+  </div>
+</footer>

@@ -1,0 +1,27 @@
+---
+import { getProjects } from "@/data/projects"
+import ProjectCard from "@/components/ProjectCard.astro"
+import type TranslationMessages from "@/types.d.ts"
+
+interface Props {
+  m: TranslationMessages
+}
+
+const { m } = Astro.props
+const projects = getProjects(m)
+const statusLabel = { production: m.status_production, selfhosted: m.status_selfhosted }
+---
+
+<div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(240px,1fr))]">
+  {projects.map((p) => (
+    <ProjectCard
+      icon={p.icon}
+      status={p.status}
+      statusLabel={statusLabel[p.status]}
+      title={p.title}
+      description={p.description}
+      stack={p.stack}
+      href={p.href}
+    />
+  ))}
+</div>

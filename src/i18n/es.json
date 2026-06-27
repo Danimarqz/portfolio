@@ -1,0 +1,74 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "lang": "es",
+
+  "title": "Daniel Márquez — backend & cloud engineer",
+  "description": "Backend & cloud engineer especializado en AWS serverless y agentes IA en producción. Go, Python, Bedrock, Lambda y DynamoDB.",
+
+  "nav_experience": "experiencia",
+  "nav_stack": "stack",
+  "nav_projects": "proyectos",
+  "nav_blog": "blog",
+  "nav_contact": "contacto",
+
+  "available": "disponible para proyectos",
+
+  "hero_role": "Backend & Cloud Engineer",
+  "hero_focus": "AWS serverless · agentes IA en producción",
+  "hero_loc": "Ourense, Galicia · remoto",
+
+  "exp_header": "$ cat experiencia.log",
+
+  "exp_ff_date": "feb. 2026 — actualidad",
+  "exp_ff_role": "Backend Developer",
+  "exp_ff_company": "Full&Fast",
+  "exp_ff_desc": "Desarrollo de un motor de cálculo serverless en AWS para el sector de energías renovables, cubriendo todo el ciclo de entrega: modelado de datos, cálculo numérico con Python y NumPy, e infraestructura como código con AWS SAM.",
+
+  "exp_op_date": "2024 — actualidad · en paralelo",
+  "exp_op_role": "Freelance · plataforma EdTech",
+  "exp_op_company": "OpositaTCAE",
+  "exp_op_desc": "Plataforma completa de preparación de oposiciones sanitarias: backend en Go, simulador de exámenes, agentes IA con Bedrock, streaming HLS protegido y plugins propios de Moodle.",
+
+  "exp_sd_date": "sept. 2024 — feb. 2026 · 1 año 6 meses",
+  "exp_sd_role": "Trainee → Junior Software Developer",
+  "exp_sd_company": "Saecdata",
+  "exp_sd_desc": "Desarrollo y mantenimiento de módulos de Odoo con Python, JavaScript, PostgreSQL y JasperReports. Lógica de negocio, vistas e informes a medida según los requisitos del cliente, y optimización de consultas PostgreSQL para mejorar el rendimiento en operaciones con mucho volumen de datos. Introduje una pipeline CI/CD self-hosted con Gitea y contenericé el código con Docker, entregándolo como una única imagen versionada en lugar de carpetas de módulos sueltas, para builds reproducibles y despliegues fiables a producción.",
+
+  "exp_big_date": "ago. 2020 — sept. 2024 · 4 años 2 meses",
+  "exp_big_role": "Consultor TIC · Software Developer",
+  "exp_big_company": "BiG Formación",
+  "exp_big_desc": "Mantenimiento de apps móviles de Moodle con Ionic, Android Studio y Xcode. Despliegue y gestión de plataformas Moodle en AWS. Automatización de tareas rutinarias con Python.",
+
+  "stack_header": "$ stack --graph",
+  "stack_subtitle": "Mi stack. Pasa el ratón sobre un nodo para resaltar sus conexiones.",
+
+  "projects_header": "$ ls proyectos/",
+  "projects_subtitle": "Sistemas en producción y experimentos self-hosted.",
+
+  "status_production": "producción",
+  "status_selfhosted": "self-hosted",
+
+  "proj_motor_title": "Dimensionador",
+  "proj_motor_desc": "Motor de dimensionado solar/BESS con cálculo vectorizado en NumPy dentro del timeout de API Gateway.",
+
+  "proj_agents_title": "Agentes IA · OpositaTCAE",
+  "proj_agents_desc": "Pipelines serverless PDF→Excel con Bedrock + Textract. Determinismo primero, IA solo donde aporta — cero alucinaciones en los datos.",
+
+  "proj_finance_title": "finance-tracker",
+  "proj_finance_desc": "Pipeline serverless Go con DynamoDB y CI/CD vía OIDC. App Flutter. Coste mensual en céntimos.",
+
+  "proj_sim_title": "Simulador OpositaTCAE",
+  "proj_sim_desc": "Backend en Go del simulador de exámenes: worker pools para emails, sincronización con Moodle e importación de Excel por streams. Frontend Astro + Preact, sobre PostgreSQL y Redis.",
+
+  "proj_server_title": "daniserver + Hermes",
+  "proj_server_desc": "Home server con agente IA local en Telegram para gestión de infra. Ollama, Docker, Cloudflare Tunnel.",
+
+  "blog_header": "$ cat blog/*.md",
+  "blog_subtitle": "Notas sobre backend, serverless y agentes IA.",
+  "blog_all": "ver todo el blog",
+  "blog_readmore": "leer",
+  "blog_back": "← volver al blog",
+  "blog_empty": "Aún no hay posts. Pronto.",
+
+  "footer_note": "Hecho con Astro. Desplegado en Cloudflare Pages."
+}
