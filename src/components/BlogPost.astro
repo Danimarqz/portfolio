@@ -15,7 +15,7 @@ const fmtDate = (d: Date) =>
   d.toLocaleDateString(lang === "es" ? "es-ES" : "en-US", { year: "numeric", month: "long", day: "numeric" })
 ---
 
-<Layout title={`${post.data.title} — Daniel Márquez`} description={post.data.description} m={m}>
+<Layout title={`${post.data.title} — Daniel Márquez`} description={post.data.description} m={m} ogRoute={post.id}>
   <main class="px-4">
     <article class="max-w-2xl mx-auto pt-28 sm:pt-36 pb-16">
       <a href={`${base}/blog/`} class="font-mono text-xs text-[var(--color-dim)] hover:text-[var(--color-cyan)] transition">{m.blog_back}</a>

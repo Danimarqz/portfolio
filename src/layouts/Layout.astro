@@ -10,14 +10,16 @@ interface Props {
   title: string;
   description: string;
   m: Record<string, string>;
+  ogRoute?: string;
 }
 
-const { title, description, m } = Astro.props;
+const { title, description, m, ogRoute } = Astro.props;
 
 const lang = Astro.url.pathname.startsWith("/es") ? "es" : "en";
 const site = Astro.site ?? new URL("https://danimarqz.dev/");
 const canonical = new URL(Astro.url.pathname, site).href;
-const ogImage = new URL("/image.png", site).href;
+// Posts pass their id (e.g. "my-post/es"); everything else uses the generic "site" card.
+const ogImage = new URL(`/og/${ogRoute ?? "site"}.png`, site).href;
 ---
 
 <!doctype html>
