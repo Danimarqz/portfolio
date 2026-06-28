@@ -28,15 +28,15 @@ const el = (type, style, children) => ({ type, props: { style, children } })
 const cardTree = (title, description) =>
   el("div", {
     width: 1200, height: 630, display: "flex", flexDirection: "column",
-    justifyContent: "space-between", backgroundColor: "#0f0f14", color: "#fff",
-    padding: "70px", borderLeft: "16px solid #7c3aed", fontFamily: "Onest",
+    justifyContent: "space-between", backgroundColor: "#0a0e16", color: "#fff",
+    padding: "70px", borderLeft: "16px solid #38bdf8", fontFamily: "Onest",
   }, [
     el("div", { fontSize: 30, color: "#aaaab9" }, "Daniel Márquez"),
     el("div", { display: "flex", flexDirection: "column" }, [
       el("div", { fontSize: 64, fontWeight: 700, lineHeight: 1.2 }, title),
       el("div", { fontSize: 30, color: "#aaaab9", marginTop: 24, lineHeight: 1.4 }, description),
     ]),
-    el("div", { fontSize: 26, color: "#7c3aed" }, "danimarqz.dev"),
+    el("div", { fontSize: 26, color: "#38bdf8" }, "danimarqz.dev"),
   ])
 
 const ogCards = {
@@ -58,7 +58,7 @@ const ogCards = {
         mkdirSync(dirname(out), { recursive: true })
         writeFileSync(out, png)
       }
-      await emit("site", "Daniel Márquez", "Backend & Serverless Engineer · Go · AWS")
+      await emit("site", "Daniel Márquez", "Backend & Cloud Engineer · Go · AWS · Bedrock")
       for (const rel of readdirSync(BLOG_DIR, { recursive: true })) {
         if (!/\.mdx?$/.test(rel)) continue
         const src = readFileSync(join(BLOG_DIR, rel), "utf8")
