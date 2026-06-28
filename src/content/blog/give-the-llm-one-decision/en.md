@@ -2,6 +2,7 @@
 title: "Give the LLM one decision: turning inconsistent PDFs into structured Excel"
 description: "Two production AI agents that read public exam PDFs into Excel — deterministic parsing first, OCR only when forced, and the LLM limited to interpreting structure. No hallucinations in the data."
 pubDate: 2026-06-27
+lang: "en"
 tags: ["aws", "bedrock", "textract", "serverless"]
 ---
 
@@ -20,7 +21,7 @@ matters most is the data itself. A wrong applicant ID is worse than no output.
 So I built it the other way around. The LLM makes **exactly one decision**, and
 it never touches the data.
 
-```mermaid
+<pre class="mermaid">
 flowchart LR
   PDF[Exam PDF] --> Q{Text layer?}
   Q -->|yes| PARSE[Deterministic parse]
@@ -29,7 +30,7 @@ flowchart LR
   OCR --> ROWS
   ROWS --> LLM["LLM · one decision:<br/>what is each column?"]
   LLM --> XLSX[(Excel)]
-```
+</pre>
 
 ## Determinism first, AI only where it pays
 

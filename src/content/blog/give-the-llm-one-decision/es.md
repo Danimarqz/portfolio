@@ -2,6 +2,7 @@
 title: "Dale una sola decisión al LLM: de PDFs inconsistentes a Excel estructurado"
 description: "Dos agentes IA en producción que leen PDFs de exámenes públicos a Excel — parseo determinista primero, OCR solo cuando hace falta, y el LLM limitado a interpretar la estructura. Cero alucinaciones en los datos."
 pubDate: 2026-06-27
+lang: "es"
 tags: ["aws", "bedrock", "textract", "serverless"]
 ---
 
@@ -21,7 +22,7 @@ ninguna.
 Así que lo construí al revés. El LLM toma **exactamente una decisión**, y nunca
 toca los datos.
 
-```mermaid
+<pre class="mermaid">
 flowchart LR
   PDF[PDF del examen] --> Q{¿Capa de texto?}
   Q -->|sí| PARSE[Parseo determinista]
@@ -30,7 +31,7 @@ flowchart LR
   OCR --> ROWS
   ROWS --> LLM["LLM · una decisión:<br/>¿qué es cada columna?"]
   LLM --> XLSX[(Excel)]
-```
+</pre>
 
 ## Determinismo primero, IA solo donde aporta
 
