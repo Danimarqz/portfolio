@@ -29,3 +29,9 @@ astro_tmp_pages_*
 .dev.vars*
 !.dev.vars.example
 !.env.example
+
+# claude/dev scratch
+CLAUDE.md
+.claude/
+BLOG-ROADMAP.md
+PLAN.md
