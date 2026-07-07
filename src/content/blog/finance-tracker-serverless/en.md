@@ -1,7 +1,7 @@
 ---
 title: "A 0 €/month finance pipeline: S3, Go, and an atomic dedup"
 description: "Consolidating broker CSVs with an event-driven Lambda — no scrapers, no bank credentials, no duplicates."
-pubDate: 2026-06-18
+pubDate: 2026-07-07
 lang: en
 tags: ["aws", "go", "dynamodb", "serverless"]
 ---
@@ -15,9 +15,11 @@ CloudWatch. Operating cost: **0 €/month**.
 flowchart LR
   U[Upload CSV] --> S3[("S3 pending/")]
   S3 -->|ObjectCreated| L["Lambda · Go arm64"]
+  PS[("Parameter Store · KMS")] -.->|Service Account| L
   L -->|"PutItem (conditional)"| DDB[("DynamoDB · source of truth")]
   L -.->|mirror, non-fatal| GS[("Google Sheets")]
   L --> P[("S3 processed/")]
+  L -.->|"≥2 err / 5 min"| SNS[("SNS · email")]
 </pre>
 
 ## Event-driven, not scheduled scraping
@@ -80,6 +82,37 @@ The whole thing lives under the free tier — S3 events, a few Lambda
 invocations a month, on-demand DynamoDB, Parameter Store for the one Google
 service-account secret (KMS-encrypted, free up to 10k params). Hence the
 0 €/month.
+
+## Hand-written IAM, not the generic policy
+
+Same idea as the dedup: the guarantee lives in the infra, not the code. The
+Lambda doesn't carry a generic `S3CrudPolicy` — it carries hand-written
+permissions pinned to the prefixes:
+
+- `s3:GetObject` + `s3:DeleteObject` only on `pending/*`.
+- `s3:PutObject` only on `processed/*`.
+- `ssm:GetParameter` only on `finance-tracker/*`, and `kms:Decrypt` only on
+  `alias/aws/ssm`.
+
+The Google service account never touches the repo, the env vars, or the logs:
+it lives encrypted in Parameter Store and is decrypted on cold start. And the
+deploy stores no long-lived AWS keys — GitHub Actions assumes a role via OIDC.
+Zero bank credentials in the cloud, zero long-lived secrets in CI.
+
+## What happens when it breaks
+
+A pipeline that runs once or twice a month is exactly the one you forget about
+until it breaks. So failure is loud and the state is recoverable:
+
+- If any step fails, the CSV stays in `pending/`. There's no half-written state
+  to clean up — you fix it and re-upload; the dedup makes the retry idempotent.
+- Every run emits structured JSON with `request_id`, `platform`, `added`,
+  `duplicates`.
+- An alarm fires on ≥2 errors in 5 minutes and publishes to SNS; I get an
+  email. Another email lands for every run that adds new operations.
+
+None of this is application code: it's a condition expression, an IAM policy,
+and a CloudWatch alarm.
 
 The lesson that keeps repeating: push the hard guarantees down to the
 infrastructure. The dedup isn't application logic I can get wrong — it's a
