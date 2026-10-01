@@ -3,7 +3,7 @@
   "lang": "es",
 
   "title": "Daniel Márquez — backend & cloud engineer",
-  "description": "Backend & cloud engineer especializado en AWS serverless y agentes IA en producción. Go, Python, Bedrock, Lambda y DynamoDB.",
+  "description": "Backend & Cloud Engineer que construye sistemas serverless en Go y Python sobre AWS, backends distribuidos, flujos event-driven y applied AI/RAG.",
 
   "nav_experience": "experiencia",
   "nav_stack": "stack",
@@ -14,20 +14,20 @@
   "available": "disponible para proyectos",
 
   "hero_role": "Backend & Cloud Engineer",
-  "hero_focus": "AWS serverless · agentes IA en producción",
+  "hero_focus": "Sistemas distribuidos · serverless · applied AI",
   "hero_loc": "Ourense, Galicia · remoto",
 
   "exp_header": "$ cat experiencia.log",
 
   "exp_ff_date": "feb. 2026 — actualidad",
-  "exp_ff_role": "Backend Developer",
+  "exp_ff_role": "Backend Developer · Sistemas serverless",
   "exp_ff_company": "Full&Fast",
-  "exp_ff_desc": "Desarrollo de un motor de cálculo serverless en AWS para el sector de energías renovables, cubriendo todo el ciclo de entrega: modelado de datos, cálculo numérico con Python y NumPy, e infraestructura como código con AWS SAM.",
+  "exp_ff_desc": "Construyo un motor de cálculo serverless en AWS para el sector de energías renovables: modelado de datos, cálculo numérico con Python y NumPy, trabajo de rendimiento e infraestructura como código con AWS SAM.",
 
   "exp_op_date": "2024 — actualidad · en paralelo",
-  "exp_op_role": "Freelance · plataforma EdTech",
+  "exp_op_role": "Freelance · Backend & Cloud Engineer",
   "exp_op_company": "OpositaTCAE",
-  "exp_op_desc": "Plataforma completa de preparación de oposiciones sanitarias: backend en Go, simulador de exámenes, agentes IA con Bedrock, streaming HLS protegido y plugins propios de Moodle.",
+  "exp_op_desc": "Plataforma EdTech en producción con backend de exámenes en Go, integraciones Moodle, vídeo HLS protegido, pagos recurrentes, ingesta documental y sistemas de IA aplicada con límites deterministas para los datos.",
 
   "exp_sd_date": "sept. 2024 — feb. 2026 · 1 año 6 meses",
   "exp_sd_role": "Trainee → Junior Software Developer",
@@ -40,31 +40,50 @@
   "exp_big_desc": "Mantenimiento de apps móviles de Moodle con Ionic, Android Studio y Xcode. Despliegue y gestión de plataformas Moodle en AWS. Automatización de tareas rutinarias con Python.",
 
   "stack_header": "$ stack --graph",
-  "stack_subtitle": "Mi stack. Pasa el ratón sobre un nodo para resaltar sus conexiones.",
+  "stack_subtitle": "Tecnologías principales y los sistemas que conectan.",
 
   "projects_header": "$ ls proyectos/",
-  "projects_subtitle": "Sistemas en producción y experimentos self-hosted.",
+  "projects_subtitle": "Algunos sistemas de producción y proyectos de ingeniería.",
 
   "status_production": "producción",
   "status_selfhosted": "self-hosted",
+  "status_pilot": "beta privada · piloto en producción",
+  "project_article": "Artículo de ingeniería",
+  "proj_visit_impronta": "Visitar Impronta",
+  "proj_visit_product": "Visitar producto",
 
-  "proj_motor_title": "Dimensionador",
-  "proj_motor_desc": "Motor de dimensionado solar/BESS con cálculo vectorizado en NumPy dentro del timeout de API Gateway.",
+  "proj_impronta_title": "Impronta",
+  "proj_impronta_desc": "Plataforma multi-tenant de protección de vídeo HLS para academias, basada en infraestructura AWS aislada y acceso de reproducción controlado.",
+  "proj_impronta_highlight_1": "Aislamiento por tenant entre S3, CloudFront y DynamoDB",
+  "proj_impronta_highlight_2": "Acceso firmado, distribución HLS y watermark por usuario",
+  "proj_impronta_highlight_3": "Procesamiento asíncrono, usage metering y control de concurrencia",
 
-  "proj_agents_title": "Agentes IA · OpositaTCAE",
-  "proj_agents_desc": "Pipelines serverless PDF→Excel con Bedrock + Textract. Determinismo primero, IA solo donde aporta — cero alucinaciones en los datos.",
+  "proj_oposita_title": "OpositaTCAE",
+  "proj_oposita_desc": "Plataforma EdTech en producción que combina exámenes, Moodle, pagos, vídeo protegido e IA aplicada sin convertir los datos en probabilísticos.",
+  "proj_oposita_highlight_1": "Plataforma de exámenes en Go con scoring, percentiles e importaciones por streaming",
+  "proj_oposita_highlight_2": "Ingesta documental AWS con S3 Vectors, Textract y trabajos asíncronos",
+  "proj_oposita_highlight_3": "Ledger idempotente de pagos y grants independientes de acceso Moodle",
 
   "proj_finance_title": "finance-tracker",
-  "proj_finance_desc": "Pipeline serverless Go con DynamoDB y CI/CD vía OIDC. App Flutter. Coste mensual en céntimos.",
+  "proj_finance_desc": "Pipeline event-driven en Go que consolida ficheros de bróker sin credenciales bancarias ni operaciones duplicadas.",
+  "proj_finance_highlight_1": "Los eventos de S3 disparan procesamiento Lambda ARM64",
+  "proj_finance_highlight_2": "Las escrituras condicionales de DynamoDB hacen atómica la deduplicación",
+  "proj_finance_highlight_3": "IAM de mínimo privilegio, CI/CD con OIDC y coste casi nulo",
 
-  "proj_sim_title": "Simulador OpositaTCAE",
-  "proj_sim_desc": "Backend en Go del simulador de exámenes: worker pools para emails, sincronización con Moodle e importación de Excel por streams. Frontend Astro + Preact, sobre PostgreSQL y Redis.",
+  "proj_ride_title": "RideTracker",
+  "proj_ride_desc": "Telemetría de moto offline-first donde la inclinación se deriva de modelos de movimiento en lugar del atajo intuitivo de la gravedad.",
+  "proj_ride_highlight_1": "Dos estimaciones independientes: velocidad GPS + yaw rate y orientación fusionada",
+  "proj_ride_highlight_2": "Filtrado de señal, anti-aliasing y detección de desplazamiento del soporte",
+  "proj_ride_highlight_3": "RideProcessor puro en JVM con grabaciones raw para reprocesamiento offline",
 
-  "proj_server_title": "daniserver + Hermes",
-  "proj_server_desc": "Home server con agente IA local en Telegram para gestión de infra. Ollama, Docker, Cloudflare Tunnel.",
+  "proj_sizing_title": "Sizing",
+  "proj_sizing_desc": "Motor de dimensionado solar y de almacenamiento optimizado para ejecutar un workload numérico dentro del timeout estricto de API Gateway.",
+  "proj_sizing_highlight_1": "Cálculo vectorizado con NumPy sobre simulaciones horarias",
+  "proj_sizing_highlight_2": "Búsqueda de escenarios de FV, BESS y restricciones económicas",
+  "proj_sizing_highlight_3": "Decisiones de rendimiento y coste expresadas en infraestructura serverless",
 
   "blog_header": "$ cat blog/*.md",
-  "blog_subtitle": "Notas sobre backend, serverless y agentes IA.",
+  "blog_subtitle": "Notas sobre backend, serverless, sistemas distribuidos e IA aplicada.",
   "blog_all": "ver todo el blog",
   "blog_readmore": "leer",
   "blog_back": "← volver al blog",

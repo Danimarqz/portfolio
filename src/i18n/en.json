@@ -3,7 +3,7 @@
   "lang": "en",
 
   "title": "Daniel Márquez — backend & cloud engineer",
-  "description": "Backend & cloud engineer focused on AWS serverless and AI agents in production. Go, Python, Bedrock, Lambda and DynamoDB.",
+  "description": "Backend & Cloud Engineer building Go and Python serverless systems on AWS, distributed backends, event-driven workflows and applied AI/RAG.",
 
   "nav_experience": "experience",
   "nav_stack": "stack",
@@ -14,20 +14,20 @@
   "available": "available for projects",
 
   "hero_role": "Backend & Cloud Engineer",
-  "hero_focus": "AWS serverless · AI agents in production",
+  "hero_focus": "Distributed systems · serverless · applied AI",
   "hero_loc": "Ourense, Galicia · remote",
 
   "exp_header": "$ cat experience.log",
 
   "exp_ff_date": "feb 2026 — present",
-  "exp_ff_role": "Backend Developer",
+  "exp_ff_role": "Backend Developer · Serverless Systems",
   "exp_ff_company": "Full&Fast",
-  "exp_ff_desc": "Developing a serverless computation engine on AWS for the renewable energy sector, working across the full delivery cycle: data modeling, numerical computation with Python and NumPy, and infrastructure as code with AWS SAM.",
+  "exp_ff_desc": "Building a serverless computation engine on AWS for the renewable energy sector: data modeling, numerical computation with Python and NumPy, performance work, and infrastructure as code with AWS SAM.",
 
   "exp_op_date": "2024 — present · in parallel",
-  "exp_op_role": "Freelance · EdTech platform",
+  "exp_op_role": "Freelance · Backend & Cloud Engineer",
   "exp_op_company": "OpositaTCAE",
-  "exp_op_desc": "End-to-end platform for healthcare-exam prep: a Go backend, an exam simulator, AI agents with Bedrock, protected HLS streaming, and custom Moodle plugins. AI is used only where it adds value — the data stays deterministic.",
+  "exp_op_desc": "Production EdTech platform spanning a Go exam backend, Moodle integrations, protected HLS video, recurring payments, document ingestion and applied AI systems with deterministic data boundaries.",
 
   "exp_sd_date": "sep 2024 — feb 2026 · 1 yr 6 mos",
   "exp_sd_role": "Trainee → Junior Software Developer",
@@ -40,31 +40,50 @@
   "exp_big_desc": "Maintained Moodle mobile apps with Ionic, Android Studio, and Xcode. Deployed and managed Moodle platforms on AWS. Automated routine tasks with Python.",
 
   "stack_header": "$ stack --graph",
-  "stack_subtitle": "My stack. Hover a node to highlight its connections.",
+  "stack_subtitle": "Core technologies and the systems they connect.",
 
   "projects_header": "$ ls projects/",
-  "projects_subtitle": "Systems in production and self-hosted experiments.",
+  "projects_subtitle": "A few production systems and engineering projects.",
 
   "status_production": "production",
   "status_selfhosted": "self-hosted",
+  "status_pilot": "private beta · production pilot",
+  "project_article": "Engineering article",
+  "proj_visit_impronta": "Visit Impronta",
+  "proj_visit_product": "Visit product",
 
-  "proj_motor_title": "Sizing",
-  "proj_motor_desc": "Solar/BESS sizing engine with vectorized NumPy computation that fits inside the API Gateway timeout.",
+  "proj_impronta_title": "Impronta",
+  "proj_impronta_desc": "Multi-tenant HLS video protection platform for academies, built around isolated AWS infrastructure and controlled playback access.",
+  "proj_impronta_highlight_1": "Tenant isolation across S3, CloudFront and DynamoDB",
+  "proj_impronta_highlight_2": "Signed access, HLS delivery and per-user watermarking",
+  "proj_impronta_highlight_3": "Async processing, usage metering and concurrency controls",
 
-  "proj_agents_title": "AI agents · OpositaTCAE",
-  "proj_agents_desc": "Serverless PDF→Excel pipelines with Bedrock + Textract. Determinism first, AI only where it helps — zero hallucinations in the data.",
+  "proj_oposita_title": "OpositaTCAE",
+  "proj_oposita_desc": "Production EdTech platform combining exam workflows, Moodle, payments, protected video and applied AI without making the data probabilistic.",
+  "proj_oposita_highlight_1": "Go exam platform with scoring, percentiles and streaming imports",
+  "proj_oposita_highlight_2": "AWS document ingestion with S3 Vectors, Textract and async jobs",
+  "proj_oposita_highlight_3": "Idempotent payment ledger and independent Moodle access grants",
 
   "proj_finance_title": "finance-tracker",
-  "proj_finance_desc": "Serverless Go pipeline with DynamoDB and CI/CD over OIDC. Flutter app. Monthly cost in cents.",
+  "proj_finance_desc": "Event-driven Go pipeline that consolidates broker files without bank credentials or duplicate operations.",
+  "proj_finance_highlight_1": "S3 events trigger ARM64 Lambda processing",
+  "proj_finance_highlight_2": "DynamoDB conditional writes make deduplication atomic",
+  "proj_finance_highlight_3": "Least-privilege IAM, OIDC CI/CD and near-zero cost",
 
-  "proj_sim_title": "OpositaTCAE simulator",
-  "proj_sim_desc": "Go backend for the exam simulator: worker pools for emails, Moodle sync, and streaming Excel import. Astro + Preact frontend, on PostgreSQL and Redis.",
+  "proj_ride_title": "RideTracker",
+  "proj_ride_desc": "Offline-first motorcycle telemetry where lean angle is derived from motion models instead of the obvious gravity shortcut.",
+  "proj_ride_highlight_1": "Independent lean estimates from GPS speed + yaw rate and fused orientation",
+  "proj_ride_highlight_2": "Signal filtering, anti-aliasing and mount-shift detection",
+  "proj_ride_highlight_3": "Pure JVM RideProcessor with raw recordings for offline reprocessing",
 
-  "proj_server_title": "daniserver + Hermes",
-  "proj_server_desc": "Home server with a local AI agent on Telegram for infra management. Ollama, Docker, Cloudflare Tunnel.",
+  "proj_sizing_title": "Sizing",
+  "proj_sizing_desc": "Solar and battery-storage sizing engine optimized to fit a numerical workload inside API Gateway's hard timeout.",
+  "proj_sizing_highlight_1": "Vectorized NumPy computation over hourly simulation data",
+  "proj_sizing_highlight_2": "Scenario search across PV, BESS and economic constraints",
+  "proj_sizing_highlight_3": "Performance and cost decisions expressed in serverless infrastructure",
 
   "blog_header": "$ cat blog/*.md",
-  "blog_subtitle": "Notes on backend, serverless, and AI agents.",
+  "blog_subtitle": "Notes on backend, serverless, distributed systems and applied AI.",
   "blog_all": "see the whole blog",
   "blog_readmore": "read",
   "blog_back": "← back to blog",

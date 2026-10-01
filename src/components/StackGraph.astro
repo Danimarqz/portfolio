@@ -6,17 +6,17 @@ const NODES = [
   { id: "aws",      label: "AWS",      color: "#ff9900", x: 300, y: 90 },
   { id: "lambda",   label: "Lambda",   color: "#ff9900", x: 300, y: 250 },
   { id: "dynamo",   label: "DynamoDB", color: "#4d72e0", x: 510, y: 260 },
-  { id: "bedrock",  label: "Bedrock",  color: "#34d399", x: 480, y: 90 },
-  { id: "textract", label: "Textract", color: "#34d399", x: 565, y: 165 },
-  { id: "docker",   label: "Docker",   color: "#2496ed", x: 300, y: 390 },
+  { id: "s3",       label: "S3",       color: "#7dd3fc", x: 480, y: 90 },
+  { id: "vectors",  label: "S3 Vectors", color: "#34d399", x: 565, y: 165 },
+  { id: "cloudfront", label: "CloudFront", color: "#f59e0b", x: 300, y: 390 },
 ] as const;
 
 const EDGES: [string, string][] = [
   ["go", "aws"], ["go", "lambda"], ["go", "dynamo"],
   ["python", "lambda"], ["python", "aws"], ["python", "dynamo"],
-  ["aws", "lambda"], ["aws", "bedrock"], ["aws", "docker"],
-  ["lambda", "dynamo"], ["lambda", "bedrock"],
-  ["bedrock", "textract"],
+  ["aws", "lambda"], ["aws", "s3"], ["aws", "cloudfront"],
+  ["lambda", "dynamo"], ["lambda", "s3"], ["lambda", "vectors"],
+  ["s3", "vectors"],
 ];
 
 const byId = Object.fromEntries(NODES.map((n) => [n.id, n]));
@@ -30,7 +30,7 @@ const byId = Object.fromEntries(NODES.map((n) => [n.id, n]));
   aria-labelledby="stack-graph-title stack-graph-desc"
 >
   <title id="stack-graph-title">Grafo del stack técnico</title>
-  <desc id="stack-graph-desc">Nodos de tecnologías conectados: Go, Python, AWS, Lambda, DynamoDB, Bedrock, Textract y Docker.</desc>
+  <desc id="stack-graph-desc">Nodos de tecnologías conectados: Go, Python, AWS, Lambda, DynamoDB, S3, S3 Vectors y CloudFront.</desc>
 
   <g class="edges">
     {EDGES.map(([a, b]) => {

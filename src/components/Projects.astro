@@ -9,7 +9,6 @@ interface Props {
 
 const { m } = Astro.props
 const projects = getProjects(m)
-const statusLabel = { production: m.status_production, selfhosted: m.status_selfhosted }
 ---
 
 <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(240px,1fr))]">
@@ -17,11 +16,16 @@ const statusLabel = { production: m.status_production, selfhosted: m.status_self
     <ProjectCard
       icon={p.icon}
       status={p.status}
-      statusLabel={statusLabel[p.status]}
+      statusLabel={p.statusLabel}
       title={p.title}
       description={p.description}
+      metric={p.metric}
+      highlights={p.highlights}
       stack={p.stack}
-      href={p.href}
+      primaryUrl={p.primaryUrl}
+      primaryLabel={p.primaryLabel}
+      articleUrl={p.articleUrl}
+      articleLabel={m.project_article}
     />
   ))}
 </div>

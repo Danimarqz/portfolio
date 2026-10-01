@@ -58,7 +58,7 @@ const ogCards = {
         mkdirSync(dirname(out), { recursive: true })
         writeFileSync(out, png)
       }
-      await emit("site", "Daniel Márquez", "Backend & Cloud Engineer · Go · AWS · Bedrock")
+      await emit("site", "Daniel Márquez", "Backend & Cloud Engineer · Go · Python · AWS · Serverless")
       for (const rel of readdirSync(BLOG_DIR, { recursive: true })) {
         if (!/\.mdx?$/.test(rel)) continue
         const src = readFileSync(join(BLOG_DIR, rel), "utf8")
